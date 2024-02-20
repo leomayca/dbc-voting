@@ -4,10 +4,12 @@ import com.dbc.voting.entity.Member;
 import com.dbc.voting.service.MemberService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/members")
@@ -17,38 +19,65 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    // POST: Adicionar um novo membro
     @PostMapping
     public ResponseEntity<Member> createMember(@RequestBody Member member) {
-        Member newMember = memberService.createMember(member);
-        return ResponseEntity.ok(newMember);
+        try {
+            Member newMember = memberService.createMember(member);
+            return ResponseEntity.ok(newMember);
+        } catch (NoSuchElementException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    // GET: Listar todos os membros
     @GetMapping
     public ResponseEntity<List<Member>> getAllMembers() {
-        List<Member> members = memberService.getMembers();
-        return ResponseEntity.ok(members);
+        try {
+            List<Member> members = memberService.getMembers();
+            return ResponseEntity.ok(members);
+        } catch (NoSuchElementException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    // GET: Buscar um membro pelo ID
     @GetMapping("/{id}")
     public ResponseEntity<Member> getMemberById(@PathVariable Long id) {
-        Member member = memberService.getMember(id);
-        return ResponseEntity.ok(member);
+        try {
+            Member member = memberService.getMember(id);
+            return ResponseEntity.ok(member);
+        } catch (NoSuchElementException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    // PUT: Atualizar um membro
     @PutMapping("/{id}")
-    public ResponseEntity<Member> updateMember(@PathVariable int id, @RequestBody Member memberDetails) {
-        Member updatedMember = memberService.updateMember(id, memberDetails);
-        return ResponseEntity.ok(updatedMember);
+    public ResponseEntity<Member> updateMember(@PathVariable Long id, @RequestBody Member memberDetails) {
+        try {
+            Member updatedMember = memberService.updateMember(id, memberDetails);
+            return ResponseEntity.ok(updatedMember);
+        } catch (NoSuchElementException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    // DELETE: Deletar um membro
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMember(@PathVariable int id) {
-        memberService.deleteMember(id);
-        return ResponseEntity.ok().build();
+        if (!memberService.existsById((long) id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            memberService.deleteMember(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

@@ -21,8 +21,12 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
-    public Member updateMember(int memberId, Member member) {
-        return memberRepository.save(member);
+    public Member updateMember(Long memberId, Member memberDetails) {
+        Member existingMember = memberRepository.findById(memberId).orElseThrow();
+
+        existingMember.setName(memberDetails.getName());
+
+        return memberRepository.save(existingMember);
     }
 
     public Member getMember(Long memberId) {
@@ -31,6 +35,10 @@ public class MemberService {
 
     public List<Member> getMembers() {
         return memberRepository.findAll();
+    }
+
+    public boolean existsById(Long id) {
+        return memberRepository.existsById(id);
     }
 
 }
