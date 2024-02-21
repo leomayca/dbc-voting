@@ -48,10 +48,17 @@ public class VotingSessionService {
         return LocalDateTime.now().isBefore(sessionEndTime);
     }
 
-    public boolean checkIfSessionIsOpenForAgendaItem(Long agendaItemId) {
+    public void checkIfSessionIsOpenForAgendaItem(Long agendaItemId) {
         AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId)
                 .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
 
-        return isSessionOpen(agendaItem.getVotingSession());
+        VotingSession votingSession = agendaItem.getVotingSession();
+        if (votingSession == null) {
+            throw new IllegalStateException("No voting session exists for this agenda item");
+        }
+
+        if (!isSessionOpen(votingSession)) {
+            throw new IllegalStateException("Voting session is closed");
+        }
     }
 }

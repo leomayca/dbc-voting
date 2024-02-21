@@ -1,6 +1,5 @@
 package com.dbc.voting.service;
 
-import com.dbc.voting.dto.VoteDTO;
 import com.dbc.voting.entity.AgendaItem;
 import com.dbc.voting.entity.Member;
 import com.dbc.voting.entity.Vote;
@@ -30,9 +29,7 @@ public class VoteService {
 
     public void castVote(Long memberId, Long agendaItemId, VoteValue voteValue) {
 
-        if (!votingSessionService.checkIfSessionIsOpenForAgendaItem(agendaItemId)) {
-            throw new IllegalStateException("Voting session is closed");
-        }
+        votingSessionService.checkIfSessionIsOpenForAgendaItem(agendaItemId);
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("Member not found with id: " + memberId));
