@@ -24,6 +24,13 @@ Este é um sistema de votação cooperativa desenvolvido em Java com Spring Boot
 - Spring Boot Starter Test (Test)
 - Springdoc OpenAPI Web MVC UI: 2.0.2
 
+## Instalação e Execuçãp
+1. **Construa o projeto com Maven:**
+   ```bash
+   mvn clean install
+2. **Execute a aplicação:**
+   ```bash
+   mvn spring-boot:run
 ## Endpoints da API
 - `POST /api/members`: Cadastra um novo membro.
 - `GET /api/members`: Lista todos os membros.
