@@ -1,6 +1,7 @@
 package com.dbc.voting.entity;
 
 import com.dbc.voting.enums.VoteValue;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class Vote {
     private int id;
 
     @ManyToOne
+    @JsonBackReference
     private Member member;
 
     @ManyToOne
