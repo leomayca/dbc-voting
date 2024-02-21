@@ -25,10 +25,19 @@ Este é um sistema de votação cooperativa desenvolvido em Java com Spring Boot
 - Springdoc OpenAPI Web MVC UI: 2.0.2
 
 ## Instalação e Execução
-1. **Construa o projeto com Maven:**
+1. **Crie o banco de dados com docker:**
+   ```bash
+   docker run --name dbc -e MYSQL_ROOT_PASSWORD=8440 -d mysql:latest
+2. **Inspecione o IP do banco e altere no properties (Se necessario):**
+   ```bash
+   docker inspect dbc | grep IPAddress
+3. **Inicie o banco:**
+   ```bash
+   docker start dbc
+4. **Construa o projeto com Maven:**
    ```bash
    mvn clean install
-2. **Execute a aplicação:**
+5. **Execute a aplicação:**
    ```bash
    mvn spring-boot:run
 ## Endpoints da API
