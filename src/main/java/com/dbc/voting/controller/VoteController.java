@@ -20,10 +20,10 @@ public class VoteController {
     private VoteService voteService;
 
     @PostMapping("/cast")
-    public ResponseEntity<VoteDTO> castVote(@RequestParam Long memberId,
+    public ResponseEntity<Void> castVote(@RequestParam Long memberId,
                                             @RequestParam Long agendaItemId,
                                             @RequestParam VoteValue voteValue) {
-        VoteDTO vote = voteService.castVote(memberId, agendaItemId, voteValue);
-        return ResponseEntity.ok(vote);
+        voteService.castVote(memberId, agendaItemId, voteValue);
+        return ResponseEntity.ok().build();
     }
 }

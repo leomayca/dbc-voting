@@ -28,7 +28,7 @@ public class VoteService {
     @Autowired
     private VotingSessionService votingSessionService;
 
-    public VoteDTO castVote(Long memberId, Long agendaItemId, VoteValue voteValue) {
+    public void castVote(Long memberId, Long agendaItemId, VoteValue voteValue) {
 
         if (!votingSessionService.checkIfSessionIsOpenForAgendaItem(agendaItemId)) {
             throw new IllegalStateException("Voting session is closed");
@@ -49,7 +49,5 @@ public class VoteService {
         vote.setVoteValue(voteValue);
 
         voteRepository.save(vote);
-
-        return new VoteDTO(vote.getId(), vote.getMember(), vote.getAgendaItem(), vote.getVoteValue());
     }
 }
