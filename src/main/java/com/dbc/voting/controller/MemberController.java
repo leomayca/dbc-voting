@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/members")
-@Tag(name = "Associados", description = " /api/v1/member, utilizado para gerenciamento de associados.")
+@Tag(name = "Associados", description = " /api/member, utilizado para gerenciamento de associados.")
 public class MemberController {
 
     @Autowired

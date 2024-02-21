@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/agenda_items")
-@Tag(name = "Pautas", description = " /api/v1/agenda_items, utilizado para gerenciamento de pautas.")
+@Tag(name = "Pautas", description = " /api/agenda_items, utilizado para gerenciamento de pautas.")
 public class AgendaItemController {
 
     @Autowired
