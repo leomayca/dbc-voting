@@ -1,6 +1,6 @@
 package com.dbc.voting.controller;
 
-import com.dbc.voting.entity.Member;
+import com.dbc.voting.dto.MemberDTO;
 import com.dbc.voting.service.MemberService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +20,15 @@ public class MemberController {
     private MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<Member> createMember(@RequestBody Member member) {
-        try {
-            Member newMember = memberService.createMember(member);
-            return ResponseEntity.ok(newMember);
-        } catch (NoSuchElementException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createMember(@RequestBody MemberDTO member) {
+        memberService.createMember(member);
     }
 
     @GetMapping
-    public ResponseEntity<List<Member>> getAllMembers() {
+    public ResponseEntity<List<MemberDTO>> getAllMembers() {
         try {
-            List<Member> members = memberService.getMembers();
+            List<MemberDTO> members = memberService.getMembers();
             return ResponseEntity.ok(members);
         } catch (NoSuchElementException ex) {
             return ResponseEntity.notFound().build();
@@ -44,9 +38,9 @@ public class MemberController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Member> getMemberById(@PathVariable Long id) {
+    public ResponseEntity<MemberDTO> getMemberById(@PathVariable Long id) {
         try {
-            Member member = memberService.getMember(id);
+            MemberDTO member = memberService.getMember(id);
             return ResponseEntity.ok(member);
         } catch (NoSuchElementException ex) {
             return ResponseEntity.notFound().build();
@@ -56,10 +50,10 @@ public class MemberController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Member> updateMember(@PathVariable Long id, @RequestBody Member memberDetails) {
+    public ResponseEntity<Void> updateMember(@PathVariable Long id, @RequestBody MemberDTO memberDetails) {
         try {
-            Member updatedMember = memberService.updateMember(id, memberDetails);
-            return ResponseEntity.ok(updatedMember);
+            memberService.updateMember(id, memberDetails);
+            return ResponseEntity.ok().build();
         } catch (NoSuchElementException ex) {
             return ResponseEntity.notFound().build();
         } catch (Exception ex) {
