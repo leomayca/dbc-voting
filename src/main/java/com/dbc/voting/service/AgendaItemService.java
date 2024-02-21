@@ -43,14 +43,14 @@ public class AgendaItemService {
     public AgendaItemDTO getAgendaItem(Long agendaItemId) {
         AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId)
                 .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
-        return new AgendaItemDTO(agendaItem.getId(), agendaItem.getTitle(), agendaItem.getDetails());
+        return new AgendaItemDTO(agendaItem.getId(), agendaItem.getTitle(), agendaItem.getDetails(), agendaItem.getVotingResult(), agendaItem.getVotingSession());
     }
 
     public List<AgendaItemDTO> getAgendaItems() {
         List<AgendaItem> agendaItemList = agendaItemRepository.findAll();
 
         return agendaItemList.stream()
-                .map(agendaItem -> new AgendaItemDTO(agendaItem.getId(), agendaItem.getTitle(), agendaItem.getDetails()))
+                .map(agendaItem -> new AgendaItemDTO(agendaItem.getId(), agendaItem.getTitle(), agendaItem.getDetails(), agendaItem.getVotingResult(), agendaItem.getVotingSession()))
                 .collect(Collectors.toList());
     }
 }

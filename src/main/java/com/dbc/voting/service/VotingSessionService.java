@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Service
 public class VotingSessionService {
@@ -24,10 +25,12 @@ public class VotingSessionService {
         AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId)
                 .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
 
-        for (VotingSession votingSession : agendaItem.getVotingSessions()) {
-            if (isSessionOpen(votingSession)) {
-                throw new IllegalStateException("A voting session is already open for this agenda item");
-            }
+        if (!Objects.isNull(agendaItem.getVotingSession()) && isSessionOpen(agendaItem.getVotingSession())) {
+            throw new IllegalStateException("A voting session is already open for this agenda item");
+        }
+
+        if (!Objects.isNull(agendaItem.getVotingSession()) && agendaItem.getVotingSession().isClosed()) {
+            throw new IllegalStateException("Voting session for this agenda item is already closed");
         }
 
         VotingSession votingSession = new VotingSession();
@@ -37,7 +40,7 @@ public class VotingSessionService {
 
         votingSessionRepository.save(votingSession);
 
-        return new VotingSessionDTO(votingSession.getId(), votingSession.getAgendaItem(), votingSession.getStartTime(), votingSession.getDuration(), true);
+        return new VotingSessionDTO(votingSession.getId(), votingSession.getAgendaItem(), votingSession.getStartTime(), votingSession.getDuration(), false);
     }
 
     private boolean isSessionOpen(VotingSession votingSession) {
@@ -49,9 +52,6 @@ public class VotingSessionService {
         AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId)
                 .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
 
-        for (VotingSession votingSession : agendaItem.getVotingSessions()) {
-            return isSessionOpen(votingSession);
-        }
-        return false;
+        return isSessionOpen(agendaItem.getVotingSession());
     }
 }

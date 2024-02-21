@@ -15,5 +15,5 @@ public class VotingSessionDTO {
     private AgendaItem agendaItem;
     private LocalDateTime startTime;
     private int duration;
-    private boolean isOpen;
+    private boolean isClosed;
 }
