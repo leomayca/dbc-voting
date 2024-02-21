@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class VotingResultService {
@@ -21,7 +22,8 @@ public class VotingResultService {
     private AgendaItemRepository agendaItemRepository;
 
     public VotingResultDTO getVotingResults(Long agendaItemId) {
-        AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId).orElseThrow();
+        AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId)
+                .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
         List<Vote> votes = voteRepository.findByAgendaItemId(agendaItemId);
 
         int countYes = (int) votes.stream().filter(vote -> vote.getVoteValue() == VoteValue.SIM).count();

@@ -28,51 +28,25 @@ public class AgendaItemController {
 
     @GetMapping
     public ResponseEntity<List<AgendaItemDTO>> getAllAgendaItems() {
-        try {
-            List<AgendaItemDTO> agendaItems = agendaItemService.getAgendaItems();
-            return ResponseEntity.ok(agendaItems);
-        } catch (NoSuchElementException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        List<AgendaItemDTO> agendaItems = agendaItemService.getAgendaItems();
+        return ResponseEntity.ok(agendaItems);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AgendaItemDTO> getAgendaItemById(@PathVariable Long id) {
-        try {
-            AgendaItemDTO agendaItem = agendaItemService.getAgendaItem(id);
-            return ResponseEntity.ok(agendaItem);
-        } catch (NoSuchElementException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        AgendaItemDTO agendaItem = agendaItemService.getAgendaItem(id);
+        return ResponseEntity.ok(agendaItem);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AgendaItem> updateAgendaItem(@PathVariable Long id, @RequestBody AgendaItemDTO agendaItemDetails) {
-        try {
-            agendaItemService.updateAgendaItem(id, agendaItemDetails);
-            return ResponseEntity.ok().build();
-        } catch (NoSuchElementException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        agendaItemService.updateAgendaItem(id, agendaItemDetails);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAgendaItem(@PathVariable int id) {
-        if (!agendaItemService.existsById((long) id)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        try {
-            agendaItemService.deleteAgendaItem(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<Void> deleteAgendaItem(@PathVariable Long id) {
+        agendaItemService.deleteAgendaItem(id);
+        return ResponseEntity.ok().build();
     }
 }

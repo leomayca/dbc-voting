@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,12 +23,16 @@ public class AgendaItemService {
         agendaItemRepository.save(agendaItemEntity);
     }
 
-    public void deleteAgendaItem(int agendaItemId) {
-        agendaItemRepository.deleteById(agendaItemId);
+    public void deleteAgendaItem(Long agendaItemId) {
+        AgendaItem existingAgendaItem = agendaItemRepository.findById(agendaItemId)
+                .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
+
+        agendaItemRepository.deleteById(existingAgendaItem.getId());
     }
 
     public void updateAgendaItem(Long agendaItemId, AgendaItemDTO agendaItem) {
-        AgendaItem existingAgendaItem = agendaItemRepository.findById(agendaItemId).orElseThrow();
+        AgendaItem existingAgendaItem = agendaItemRepository.findById(agendaItemId)
+                .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
 
         existingAgendaItem.setTitle(agendaItem.getTitle());
         existingAgendaItem.setDetails(agendaItem.getDetails());
@@ -36,7 +41,8 @@ public class AgendaItemService {
     }
 
     public AgendaItemDTO getAgendaItem(Long agendaItemId) {
-        AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId).orElseThrow();
+        AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId)
+                .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
         return new AgendaItemDTO(agendaItem.getId(), agendaItem.getTitle(), agendaItem.getDetails());
     }
 
@@ -46,9 +52,5 @@ public class AgendaItemService {
         return agendaItemList.stream()
                 .map(agendaItem -> new AgendaItemDTO(agendaItem.getId(), agendaItem.getTitle(), agendaItem.getDetails()))
                 .collect(Collectors.toList());
-    }
-
-    public boolean existsById(Long id) {
-        return agendaItemRepository.existsById(id);
     }
 }

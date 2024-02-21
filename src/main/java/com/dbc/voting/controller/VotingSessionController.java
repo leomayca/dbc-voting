@@ -23,11 +23,7 @@ public class VotingSessionController {
     @PostMapping("/open")
     public ResponseEntity<VotingSessionDTO> openVotingSession(@RequestParam Long agendaItemId,
                                                               @RequestParam(required = false) Integer durationMinutes) {
-        try {
-            VotingSessionDTO session = votingSessionService.openVotingSession(agendaItemId, durationMinutes);
-            return ResponseEntity.status(HttpStatus.CREATED).body(session);
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        VotingSessionDTO session = votingSessionService.openVotingSession(agendaItemId, durationMinutes);
+        return ResponseEntity.status(HttpStatus.CREATED).body(session);
     }
 }

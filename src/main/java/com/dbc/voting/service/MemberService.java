@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,12 +23,16 @@ public class MemberService {
         memberRepository.save(memberEntity);
     }
 
-    public void deleteMember(int memberId) {
-        memberRepository.deleteById(memberId);
+    public void deleteMember(Long memberId) {
+        Member existingMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("Member not found with id: " + memberId));
+
+        memberRepository.deleteById(existingMember.getId());
     }
 
     public void updateMember(Long memberId, MemberDTO memberDetails) {
-        Member existingMember = memberRepository.findById(memberId).orElseThrow();
+        Member existingMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("Member not found with id: " + memberId));
 
         existingMember.setName(memberDetails.getName());
 
@@ -35,7 +40,8 @@ public class MemberService {
     }
 
     public MemberDTO getMember(Long memberId) {
-        Member member =  memberRepository.findById(memberId).orElseThrow();
+        Member member =  memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("Member not found with id: " + memberId));
         return new MemberDTO(member.getId(), member.getName());
     }
 
@@ -46,9 +52,4 @@ public class MemberService {
                 .map(member -> new MemberDTO(member.getId(), member.getName()))
                 .collect(Collectors.toList());
     }
-
-    public boolean existsById(Long id) {
-        return memberRepository.existsById(id);
-    }
-
 }

@@ -27,51 +27,25 @@ public class MemberController {
 
     @GetMapping
     public ResponseEntity<List<MemberDTO>> getAllMembers() {
-        try {
-            List<MemberDTO> members = memberService.getMembers();
-            return ResponseEntity.ok(members);
-        } catch (NoSuchElementException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        List<MemberDTO> members = memberService.getMembers();
+        return ResponseEntity.ok(members);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MemberDTO> getMemberById(@PathVariable Long id) {
-        try {
-            MemberDTO member = memberService.getMember(id);
-            return ResponseEntity.ok(member);
-        } catch (NoSuchElementException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        MemberDTO member = memberService.getMember(id);
+        return ResponseEntity.ok(member);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateMember(@PathVariable Long id, @RequestBody MemberDTO memberDetails) {
-        try {
-            memberService.updateMember(id, memberDetails);
-            return ResponseEntity.ok().build();
-        } catch (NoSuchElementException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        memberService.updateMember(id, memberDetails);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMember(@PathVariable int id) {
-        if (!memberService.existsById((long) id)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        try {
-            memberService.deleteMember(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
+        memberService.deleteMember(id);
+        return ResponseEntity.ok().build();
     }
 }
