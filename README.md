@@ -37,10 +37,11 @@ Este é um sistema de votação cooperativa desenvolvido em Java com Spring Boot
 - `GET /api/members/{id}`: Obtém detalhes de um membro específico.
 - `PUT /api/members/{id}`: Atualiza um membro.
 - `DELETE /api/members/{id}`: Remove um membro.
-- `POST /api/agendaItems`: Cadastra uma nova pauta.
-- `GET /api/agendaItems`: Lista todas as pautas.
-- `GET /api/agendaItems/{id}`: Obtém detalhes de uma pauta específica.
+- `POST /api/agenda_items`: Cadastra uma nova pauta.
+- `GET /api/agenda_items`: Lista todas as pautas.
+- `GET /api/agenda_items/{id}`: Obtém detalhes de uma pauta específica.
 - `PUT /api/members/{id}`: Atualiza uma pauta.
 - `DELETE /api/members/{id}`: Remove uma pauta.
 - `POST /api/votes/cast`: Registra um voto.
-- `GET /api/votingResults/{agendaItemId}`: Obtém o resultado da votação de uma pauta.
+- `GET /api/voting_results/{agendaItemId}`: Obtém o resultado da votação de uma pauta.
+- `POST /api/voting_sessions/open`: Cadastra uma nova sessão de votação
