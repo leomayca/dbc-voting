@@ -1,5 +1,6 @@
 package com.dbc.voting.controller;
 
+import com.dbc.voting.dto.AgendaItemDTO;
 import com.dbc.voting.entity.AgendaItem;
 import com.dbc.voting.service.AgendaItemService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,21 +21,15 @@ public class AgendaItemController {
     AgendaItemService agendaItemService;
 
     @PostMapping
-    public ResponseEntity<AgendaItem> createAgendaItem(@RequestBody AgendaItem agendaItem) {
-        try {
-            AgendaItem newAgendaItem = agendaItemService.createAgendaItem(agendaItem);
-            return ResponseEntity.ok(newAgendaItem);
-        } catch (NoSuchElementException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createAgendaItem(@RequestBody AgendaItemDTO agendaItem) {
+        agendaItemService.createAgendaItem(agendaItem);
     }
 
     @GetMapping
-    public ResponseEntity<List<AgendaItem>> getAllAgendaItems() {
+    public ResponseEntity<List<AgendaItemDTO>> getAllAgendaItems() {
         try {
-            List<AgendaItem> agendaItems = agendaItemService.getAgendaItems();
+            List<AgendaItemDTO> agendaItems = agendaItemService.getAgendaItems();
             return ResponseEntity.ok(agendaItems);
         } catch (NoSuchElementException ex) {
             return ResponseEntity.notFound().build();
@@ -44,9 +39,9 @@ public class AgendaItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AgendaItem> getAgendaItemById(@PathVariable Long id) {
+    public ResponseEntity<AgendaItemDTO> getAgendaItemById(@PathVariable Long id) {
         try {
-            AgendaItem agendaItem = agendaItemService.getAgendaItem(id);
+            AgendaItemDTO agendaItem = agendaItemService.getAgendaItem(id);
             return ResponseEntity.ok(agendaItem);
         } catch (NoSuchElementException ex) {
             return ResponseEntity.notFound().build();
@@ -56,10 +51,10 @@ public class AgendaItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AgendaItem> updateAgendaItem(@PathVariable int id, @RequestBody AgendaItem agendaItemDetails) {
+    public ResponseEntity<AgendaItem> updateAgendaItem(@PathVariable Long id, @RequestBody AgendaItemDTO agendaItemDetails) {
         try {
-            AgendaItem updatedAgendaItem = agendaItemService.updateAgendaItem(id, agendaItemDetails);
-            return ResponseEntity.ok(updatedAgendaItem);
+            agendaItemService.updateAgendaItem(id, agendaItemDetails);
+            return ResponseEntity.ok().build();
         } catch (NoSuchElementException ex) {
             return ResponseEntity.notFound().build();
         } catch (Exception ex) {
