@@ -1,5 +1,6 @@
 package com.dbc.voting.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,9 +15,9 @@ public class VotingSession {
     private int id;
 
     @ManyToOne
+    @JsonBackReference
     private AgendaItem agendaItem;
     private LocalDateTime startTime;
     private int duration;
-    private boolean isOpen;
 
 }

@@ -1,5 +1,6 @@
 package com.dbc.voting.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ public class AgendaItem {
     private String details;
 
     @OneToMany(mappedBy = "agendaItem")
+    @JsonManagedReference
     private List<VotingSession> votingSessions;
 
 }
