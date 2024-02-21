@@ -1,5 +1,6 @@
 package com.dbc.voting.controller;
 
+import com.dbc.voting.dto.VotingSessionDTO;
 import com.dbc.voting.entity.VotingSession;
 import com.dbc.voting.service.VotingSessionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,10 +21,10 @@ public class VotingSessionController {
     private VotingSessionService votingSessionService;
 
     @PostMapping("/open")
-    public ResponseEntity<VotingSession> openVotingSession(@RequestParam Long agendaItemId,
+    public ResponseEntity<VotingSessionDTO> openVotingSession(@RequestParam Long agendaItemId,
                                                               @RequestParam(required = false) Integer durationMinutes) {
         try {
-            VotingSession session = votingSessionService.openVotingSession(agendaItemId, durationMinutes);
+            VotingSessionDTO session = votingSessionService.openVotingSession(agendaItemId, durationMinutes);
             return ResponseEntity.status(HttpStatus.CREATED).body(session);
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

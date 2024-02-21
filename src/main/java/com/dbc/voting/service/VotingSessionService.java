@@ -20,23 +20,38 @@ public class VotingSessionService {
     @Autowired
     private AgendaItemRepository agendaItemRepository;
 
-    public VotingSession openVotingSession(Long agendaItemId, int durationMinutes) {
+    public VotingSessionDTO openVotingSession(Long agendaItemId, int durationMinutes) {
         AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId)
                 .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
+
+        for (VotingSession votingSession : agendaItem.getVotingSessions()) {
+            if (isSessionOpen(votingSession)) {
+                throw new IllegalStateException("A voting session is already open for this agenda item");
+            }
+        }
 
         VotingSession votingSession = new VotingSession();
         votingSession.setAgendaItem(agendaItem);
         votingSession.setStartTime(LocalDateTime.now());
         votingSession.setDuration(durationMinutes > 0 ? durationMinutes : 1);
 
-        return votingSessionRepository.save(votingSession);
+        votingSessionRepository.save(votingSession);
+
+        return new VotingSessionDTO(votingSession.getId(), votingSession.getAgendaItem(), votingSession.getStartTime(), votingSession.getDuration(), true);
     }
 
-    public boolean isSessionOpen(Long votingSessionId) {
-        VotingSession votingSession = votingSessionRepository.findById(votingSessionId)
-                .orElseThrow(() -> new NoSuchElementException("VotingSession not found with id: " + votingSessionId));
-
+    private boolean isSessionOpen(VotingSession votingSession) {
         LocalDateTime sessionEndTime = votingSession.getStartTime().plusMinutes(votingSession.getDuration());
         return LocalDateTime.now().isBefore(sessionEndTime);
+    }
+
+    public boolean checkIfSessionIsOpenForAgendaItem(Long agendaItemId) {
+        AgendaItem agendaItem = agendaItemRepository.findById(agendaItemId)
+                .orElseThrow(() -> new NoSuchElementException("AgendaItem not found with id: " + agendaItemId));
+
+        for (VotingSession votingSession : agendaItem.getVotingSessions()) {
+            return isSessionOpen(votingSession);
+        }
+        return false;
     }
 }
