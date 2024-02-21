@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VotingResultDTO {
-    private int agendaItemId;
+    private Long agendaItemId;
     private String agendaItemTitle;
     private int votesYes;
     private int votesNo;
